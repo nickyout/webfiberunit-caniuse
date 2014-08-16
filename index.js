@@ -1,0 +1,1 @@
+require('webfiberunit').reporters.verbose.run('config/configs', ['test/suite.js']);

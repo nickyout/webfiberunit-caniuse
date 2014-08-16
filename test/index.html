@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test page</title>
+    <script>
+        window.inputFileHistory = [];
+        // Check input file results
+        function onFileInput(event) {
+            var arr = Array.prototype.slice.call(event.target.files);
+            arr = arr.map(function(val) {
+                return val.name;
+            });
+            console.log(arr);
+            window.inputFileHistory.push(arr);
+        }
+
+        function testFunction() {
+            return "You passed " + Array.prototype.slice.call(arguments).join(',');
+        }
+    </script>
+</head>
+<body>
+
+<h3>Simple inputs</h3>
+<input id="id-input-text" type="text"/>
+<br/>
+<input id="id-input-number" type="number"/>
+<br/>
+<button id="id-button"></button>
+<br/>
+<textarea id="id-textarea"></textarea>
+<br/>
+
+<h3>text containers</h3>
+<span id="id-span1">Span 1</span>
+<span id="id-span2">Span 2</span>
+<span id="id-span3">Span 3</span>
+<a id="id-a1">A 1</a>
+<a id="id-a2">A 2</a>
+<a id="id-a3">A 3</a>
+<br/>
+
+<h3>file inputs</h3>
+<input id="id-input-file" type="file" onchange="onFileInput(event)"/>
+<br/>
+<input id="id-input-file-multiple" type="file" multiple onchange="onFileInput(event)"/>
+<br/>
+<!--form action="input-element.php" method="post">
+    <input id="id-input-form-file" type="file"/>
+    <input id="id-input-form-submit" type="submit"/>
+</form>
+<br/>
+<form action="input-element.php" method="post">
+    <input id="id-input-form-file-multiple" type="file" multiple/>
+    <input id="id-input-form-submit-multiple" type="submit"/>
+</form-->
+<br/>
+
+<h3>select</h3>
+<select name="country">
+    <option value="option1">Option 1</option>
+    <option value="option2">Option 2</option>
+    <option value="option3">Option 3</option>
+</select>
+<br/>
+
+<h3>iframe</h3>
+<iframe id="id-iframe" src="iframe.html"></iframe>
+
+</body>
+</html>
