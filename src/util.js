@@ -1,5 +1,9 @@
 var separator = "-";
 
+function asc(a, b) {
+	return (isNaN(a) || isNaN(b)) ? (1 - 2 * (a < b)) : (+a - +b);
+}
+
 function recursiveSort(headers, target, row, removeUsed) {
 	var name = headers[0],
 		val = row[name];
@@ -109,17 +113,19 @@ module.exports = {
 		maxDepth || (maxDepth = 0);
 		path || (path = '');
 		var sep = path && separator,
-			arr = Object.keys(obj),
-			el;
+			keys = Object.keys(obj),
+			arr = [];
 
 		if (maxDepth == 1) {
-			return arr;
+			return keys;
 		}
-		for (var name in obj) {
-			arr.push(path + sep + name);
+		var i= 0, el, name;
+		while (name = keys[i++]) {
 			el = obj[name];
 			if (el && typeof el === "object") {
-				arr.push.apply(arr, nestedKeys(el, maxDepth - 1, name));
+				arr.push.apply(arr, nestedKeys(el, maxDepth - 1, path + sep + name));
+			} else {
+				arr.push(path + sep + name);
 			}
 		}
 		return arr;
@@ -127,7 +133,7 @@ module.exports = {
 
 	/**
 	 * Recursive for each for objects.
-	 * Calls properties in alphabetic order (that is, ordered by string compare a < b)
+	 * Calls properties in ascending order ( 'a' < 'b', but '10.0' > '9.0')
 	 * @param {Object} obj
 	 * @param {Function} fn - called with (obj, name, depthIndex)
 	 * @param {Function=} fnClose - called only for objects, after each of its properties have been iterated over.
@@ -137,7 +143,7 @@ module.exports = {
 	forEachRecursive: function forEachRecursive(obj, fn, fnClose, depthIndex) {
 		depthIndex || (depthIndex = 0);
 		depthIndex++;
-		var arr = Object.keys(obj).sort(function (a, b) { return 1 - 2 * (a < b) }),
+		var arr = Object.keys(obj).sort(asc),
 			i = 0, name, val;
 		while (name = arr[i++]) {
 			val = obj[name];
@@ -146,6 +152,15 @@ module.exports = {
 				forEachRecursive(val, fn, fnClose, depthIndex);
 				fnClose && fnClose(val, name, depthIndex);
 			}
+		}
+	},
+
+	forEachAsc: function(obj, fn) {
+		var arr = Object.keys(obj).sort(asc),
+			i = 0, name, val;
+		while (name = arr[i++]) {
+			val = obj[name];
+			fn(val, name, obj);
 		}
 	}
 };

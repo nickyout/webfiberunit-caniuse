@@ -1,12 +1,14 @@
 // Expect ALL possible webdriverConfigs here
 module.exports = [{
 	browser: {
-		browserName: "chrome"
-	},
-	url: 'http://localhost/webdriverio-caniuse/test/index.html'
+		browserName: "chrome",
+		version: "36.0",
+		platform: "LINUX"
+	}
 }, {
 	browser: {
-		browserName: "firefox"
-	},
-	url: 'http://localhost/webdriverio-caniuse/test/index.html'
+		browserName: "firefox",
+		version: "30.0",
+		platform: "LINUX"
+	}
 }];

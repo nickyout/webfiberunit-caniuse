@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <title>Test page</title>
     <script>
+
+        window.clickHistory = {};
+
+        function onClick(event) {
+            var id = event.target.id,
+                h = window.clickHistory;
+
+            if (!id) {
+                return;
+            }
+            h[id] || (h[id] = []);
+            console.log(id);
+            h[id].push(+new Date());
+        }
+
         window.inputFileHistory = [];
         // Check input file results
         function onFileInput(event) {
@@ -11,7 +26,6 @@
             arr = arr.map(function(val) {
                 return val.name;
             });
-            console.log(arr);
             window.inputFileHistory.push(arr);
         }
 
@@ -20,16 +34,16 @@
         }
     </script>
 </head>
-<body>
+<body onclick="onClick(event)">
 
 <h3>Simple inputs</h3>
-<input id="id-input-text" type="text"/>
+<input id="id-input-text" type="text" style="background-color: rgba(171,205,239,1)" value="value-input-text"/>
 <br/>
 <input id="id-input-number" type="number"/>
 <br/>
 <button id="id-button"></button>
 <br/>
-<textarea id="id-textarea"></textarea>
+<textarea id="id-textarea" style="background-color: #ABCDEF"></textarea>
 <br/>
 
 <h3>text containers</h3>
@@ -39,23 +53,36 @@
 <a id="id-a1">A 1</a>
 <a id="id-a2">A 2</a>
 <a id="id-a3">A 3</a>
+<div id="id-div1">Div 1</div>
+<div id="id-div2">Div 2</div>
+<div id="id-div3">Div 3</div>
+<p id="id-p1">P 1</p>
+<p id="id-p2">P 2</p>
+<p id="id-p3">P 3</p>
 <br/>
 
+<h3>Alert spawner</h3>
+<input id="id-input-alert" type="button" onclick="confirm('alert-text')"/>
+
+<h3>selectables</h3>
+<input id="id-input-checkbox" type="checkbox" name="name-input-checkbox" checked=""/>
+<input id="id-input-radio" type="radio" name="name-input-radio" checked=""/>
+
 <h3>file inputs</h3>
-<input id="id-input-file" type="file" onchange="onFileInput(event)"/>
+<input id="id-input-file-html5" type="file" onchange="onFileInput(event)"/>
 <br/>
-<input id="id-input-file-multiple" type="file" multiple onchange="onFileInput(event)"/>
+<input id="id-input-file-html5-multiple" type="file" multiple="" onchange="onFileInput(event)"/>
 <br/>
 <!--form action="input-element.php" method="post">
-    <input id="id-input-form-file" type="file"/>
-    <input id="id-input-form-submit" type="submit"/>
+    <input id="id-input-file-form" type="file"/>
+    <input id="id-input-submit-form" type="submit"/>
 </form>
 <br/>
 <form action="input-element.php" method="post">
-    <input id="id-input-form-file-multiple" type="file" multiple/>
-    <input id="id-input-form-submit-multiple" type="submit"/>
-</form-->
-<br/>
+    <input id="id-input-file-form-multiple" type="file" multiple=""/>
+    <input id="id-input-submit-form-multiple" type="submit"/>
+</form>
+<br/-->
 
 <h3>select</h3>
 <select name="country">

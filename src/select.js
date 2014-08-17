@@ -21,7 +21,7 @@ function cluster(selector, arrObj, only, fn) {
 			continue;
 		}
 		arr = arrObj[name];
-		returnObj[name] = fn.bind(null, util.format.apply(util, [selector].concat(arr)), name);
+		returnObj[name] = fn.bind(null, util.format.apply(util, [selector].concat(arr)), arr[0], arr[1]);
 	}
 	return returnObj;
 }
@@ -40,21 +40,39 @@ module.exports = select = {
 		'text': function(only, fn) {
 			return cluster('=%s', {
 				'span': 'Span 1',
-				'a': 'A 1'
+				'a': 'A 1',
+				'p': 'P 1',
+				'div': 'Div 1'
 			}, only, fn);
 		},
 		'css': function(only, fn) {
 			return cluster('%s[id="%s"]', {
 				'span': ['span', 'id-span1'],
 				'a': ['a', 'id-a1'],
-				'input text': ['input', 'id-input-text']
+				'p': ['p', 'id-p1'],
+				'div': ['div', 'id-div1'],
+				'input text': ['input', 'id-input-text'],
+				'button': ['button', 'id-button'],
+				'input checkbox': ['input', 'id-input-checkbox'],
+				"input radio": ['input', 'id-input-radio'],
+				"input file html5": ['input', 'id-input-file-html5'],
+				"input file html5 multiple": ['input', 'id-input-file-html5-multiple'],
+				"textarea": ['textarea', 'id-textarea']
 			}, only, fn);
 		},
 		'xpath': function(only, fn) {
 			return cluster('//body/%s[@id="%s"]', {
 				'span': ['span', 'id-span1'],
 				'a': ['a', 'id-a1'],
-				'input text': ['input', 'id-input-text']
+				'p': ['p', 'id-p1'],
+				'div': ['div', 'id-div1'],
+				'input text': ['input', 'id-input-text'],
+				'button': ['button', 'id-button'],
+				'input checkbox': ['input', 'id-input-checkbox'],
+				"input radio": ['input', 'id-input-radio'],
+				"input file html5": ['input', 'id-input-file-html5'],
+				"input file html5 multiple": ['input', 'id-input-file-html5-multiple'],
+				"textarea": ['textarea', 'id-textarea']
 			}, only, fn);
 		}
 	},
@@ -69,19 +87,25 @@ module.exports = select = {
 		'text': function(only, fn) {
 			return cluster('*=%s', {
 				'span': 'Span',
-				'a': 'A'
+				'a': 'A',
+				'p': 'P',
+				'div': 'Div'
 			}, only, fn);
 		},
 		'css': function(only, fn) {
 			return cluster('%s', {
 				'span': 'span',
-				'a': 'a'
+				'a': 'a',
+				'p': 'p',
+				'div': 'div'
 			}, only, fn);
 		},
 		'xpath': function(only, fn) {
 			return cluster('//body/%s[contains(@id,"%s")]', {
 				'span': ['span', 'id-span'],
-				'a': ['a', 'id-a']
+				'a': ['a', 'id-a'],
+				'p': ['p', 'id-p'],
+				'div': ['div', 'id-div']
 			}, only, fn);
 		}
 	}

@@ -24,15 +24,20 @@ function normalizeConfig(browser) {
  */
 function run(result, fn, command) {
 	var error = null,
-		errorStr = '-';
+		warn = null,
+		errorStr = null;
 	try {
-		fn();
+		warn = fn();
 	} catch (err) {
 		error = err;
 		errorStr = error.toString().split(/\s*[\n\r]\s*/).slice(0,2).join(' -> ');
 	}
-	result.add(command, error);
-	console.log(sprintf("%-5s %-30s %s", error ? "error" : "ok", command, errorStr).substr(0, process.stdout.columns));
+	var code = error && 2 || warn && 1 || 0;
+	result.add(command, code, error, warn);
+
+	var stateStr = error && "error" || warn && 'warn' || "ok",
+		message = errorStr || warn || '-';
+	console.log(sprintf("%-6s %-40s %s", stateStr, command, message).substr(0, process.stdout.columns));
 }
 
 /**

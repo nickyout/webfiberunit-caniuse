@@ -16,10 +16,17 @@ u.sort(arr, ['command']);
 
 var obj = u.nest(arr, names, true);
 
-var str = '',
+var outputStr = '',
 	write = function() {
 		// Flatten flatten
-		str += util.format.apply(util, Array.prototype.concat.apply([], Array.prototype.slice.call(arguments)));
+		var args = Array.prototype.concat.apply([], Array.prototype.slice.call(arguments)).map(function(val, index) {
+			if (typeof val === "string" && index !== 0) {
+				return ent.encode(val);
+			} else {
+				return val;
+			}
+		});
+		outputStr += util.format.apply(util, args);
 	};
 
 write(doc.header);
@@ -49,43 +56,112 @@ function writeDoc(name, args) {
 	}
 }
 
-u.forEachRecursive(obj, function(val, name, depth) {
-	var htmlName = ent.encode(name);
-	switch (depth) {
+function writeCells(obj, nestedKeyDepth) {
+	var colspan, totalColspan = 0;
+	u.forEachAsc(obj, function(val, childName) {
+		colspan = u.nestedKeys(val, nestedKeyDepth).length;
+		totalColspan += colspan;
+		write('<td colspan="%s">%s</td>', colspan, childName);
+
+	});
+	write('</tr>');
+	return totalColspan
+}
+
+function writeParagraph(name, lastName) {
+	var thisCommand = name.split('-'),
+		lastCommand = lastName.split('-'),
+		max = thisCommand.length,
+		i=-1,
+		subCommand;
+	while (++i < max) {
+		if (thisCommand[i] != lastCommand[i]) {
+			subCommand = thisCommand.slice(0, i+1);
+			console.error(subCommand.join('-'));
+			writeDoc(subCommand.join('-')) || write('<h%s>%s</h%s>', (3 + i), subCommand.join('-'), (3 + i));
+		}
+	}
+}
+
+function writeResultCell(val) {
+	var text = "",
+		bgColor,
+		hoverText = '',
+		first = true,
+		bestCode = 2;
+	u.forEachAsc(val, function(childVal, childName) {
+		// Add all passes to hovertext
+		hoverText+= util.format("%s: %s\n", childName, (childVal.message || "No problems").replace(/[\n\r]/g, '').substr(0, 50));
+		if (childVal.code < bestCode) {
+			bestCode = childVal.code;
+			// Ordered by number: if earliest version is success, assume all versions will be supported
+			text = first ? childName : 'All';
+
+		}
+		first = false;
+	});
+	switch (bestCode) {
+		case 0:
+			bgColor = "#66FF66";
+			break;
 		case 1:
-			write('<a href="#">');
-			writeDoc(name) || write('<h3>%s</h3>', htmlName);
-			write('</a>');
-			write('<table><th>Platform</th><th>Device</th><th>Browser</th><th>Version</th><th>Pass</th>');
+			bgColor = "#FFFF66";
 			break;
 		case 2:
-			write('<tr>');
-		case 3:
-		case 4:
-			var span = u.nestedKeys(val, 5 - depth).length;
-			write('<td rowspan="%d">%s</td>', span, htmlName);
-			break;
-		case 5:
-			write('<td>%s</td>', htmlName);
-			var pass = val.error === null,
-				text = pass ? "yes" : "no",
-				bgColor = pass ? "#66FF66" : "#FF6666",
-				hoverText = ent.encode(val.error || "No error");
+			bgColor = "#FF6666";
+	}
+	write('<td style="background-color:%s;" title="%s">%s</td>', bgColor, hoverText, text || "-");
+}
 
-			write('<td style="background-color:%s;" title="%s">%s</td>', bgColor, hoverText, text);
+var lastName = '',
+	totalColspan = 0,
+	currentColspan = 0,
+	rowTitles = ['Platform', 'Device', 'Browser', 'Version'];
+u.forEachRecursive(obj, function(val, name, depth) {
+
+	if (currentColspan == totalColspan) {
+		write('</tr>');
+		write('<tr>');
+		rowTitles[depth - 1] && write('<th scope="row">%s</th>', rowTitles[depth - 1]);
+		currentColspan = 0;
+	}
+
+	switch (depth) {
+		// Command, children are Platform
+		case 1:
+			// Make title
+			writeParagraph(name, lastName);
+			lastName = name;
+
+			write('<table>');
+			write('<tr>');
+			write('<th scope="row">%s</th>', rowTitles[0]);
+			totalColspan = currentColspan = writeCells(val, 3);
+			break;
+		// Platform, children are Device
+		case 2:
+			currentColspan += writeCells(val, 2);
+			break;
+		// Device, children are Browser
+		case 3:
+			currentColspan += writeCells(val, 1);
+			break;
+		// Browser
+		case 4:
+			writeResultCell(val);
+			break;
+		// Browser version
+		case 5:
 			break;
 	}
+
 }, function(obj, name, depth) {
 	switch (depth) {
 		case 1:
-			write('</table>');
-			break;
-		case 2:
-			break;
-		case 5:
 			write('</tr>');
+			write('</table>');
 			break;
 	}
 });
 write(doc.footer);
-console.log(str);
+console.log(outputStr);

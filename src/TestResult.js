@@ -12,9 +12,11 @@ var TestResult = function(webdriverConfig) {
 /**
  * Add test data result
  * @param {String} command
+ * @param {Number} code 0 - ok, 1 - error, 2 - warn
  * @param {Error=} error
+ * @param {String=} warn
  */
-TestResult.prototype.add = function(command, error) {
+TestResult.prototype.add = function(command, code, error, warn) {
 	var row = {
 		date: +new Date(),
 		host: this.host.host,
@@ -24,7 +26,8 @@ TestResult.prototype.add = function(command, error) {
 		deviceName: this.browser.device,
 
 		command: command,
-		error: error && (error.message + '\n' + error.stack)
+		code: code,
+		message: error && (error.message + '\n' + error.stack) || warn || null
 	};
 	this.data.push(row);
 };
