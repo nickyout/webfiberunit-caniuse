@@ -65,7 +65,7 @@ So my goal is to cover every WebdriverIO (2.x) command available and check if an
 *   ~~inst.elementIdSelected~~
 *   ~~inst.elementIdSize~~
 *   ~~inst.elementIdText~~
-*   ~~inst.elementIdValue~~
+*   inst.elementIdValue
     *   input text
     *   input number
     *   textarea
@@ -108,8 +108,8 @@ So my goal is to cover every WebdriverIO (2.x) command available and check if an
 *   ~~inst.isExisting~~
 *   ~~inst.isSelected~~
 *   ~~inst.isVisible~~
-*   ~~inst.keys~~
-    *   characters
+*   inst.keys
+    *   ~~characters~~
     *   non-character keys ([JSONWire doc][5])
 *   inst.leftClick
 *   inst.localStorage
@@ -134,8 +134,8 @@ So my goal is to cover every WebdriverIO (2.x) command available and check if an
 *   inst.rotate
 *   ~~inst.saveScreenshot~~
 *   ~~inst.screenshot~~
-*   ~~inst.scroll~~
-    *   window
+*   inst.scroll
+    *   ~~window~~
     *   div
 *   inst.session
 *   inst.sessionStorage
