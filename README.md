@@ -50,7 +50,7 @@ So my goal is to cover every WebdriverIO (2.x) command available and check if an
 *   inst.deviceKeyEvent
 *   inst.doDoubleClick
 *   inst.doubleClick
-*   inst.dragAndDrop
+*   inst.dragAndDrop (HTML5)
 *   ~~inst.element~~
 *   ~~inst.elementActive~~
 *   ~~inst.elementIdAttribute~~
@@ -66,6 +66,9 @@ So my goal is to cover every WebdriverIO (2.x) command available and check if an
 *   ~~inst.elementIdSize~~
 *   ~~inst.elementIdText~~
 *   ~~inst.elementIdValue~~
+    *   input text
+    *   input number
+    *   textarea
 *   ~~inst.elements~~
 *   ~~inst.execute~~
 *   inst.executeAsync
@@ -106,6 +109,8 @@ So my goal is to cover every WebdriverIO (2.x) command available and check if an
 *   ~~inst.isSelected~~
 *   ~~inst.isVisible~~
 *   ~~inst.keys~~
+    *   characters
+    *   non-character keys ([JSONWire doc][5])
 *   inst.leftClick
 *   inst.localStorage
 *   inst.localStorageSize
@@ -130,12 +135,17 @@ So my goal is to cover every WebdriverIO (2.x) command available and check if an
 *   ~~inst.saveScreenshot~~
 *   ~~inst.screenshot~~
 *   ~~inst.scroll~~
+    *   window
+    *   div
 *   inst.session
 *   inst.sessionStorage
 *   inst.sessionStorageSize
 *   inst.sessions
 *   ~~inst.setCookie~~
 *   inst.setValue
+    *   input text
+    *   input number
+    *   textarea
 *   inst.source
 *   inst.status
 *   inst.submit
@@ -200,3 +210,4 @@ Not interested. Unlikely to happen.
 [2]: https://github.com/webdriverio/webdriverio "WebdriverIO on Github"
 [3]: https://github.com/admc/wd "wd on Github"
 [4]: https://github.com/nickyout/webfiberunit "webfiberunit on Github"
+[5]: https://code.google.com/p/selenium/wiki/JsonWireProtocol#/session/:sessionId/element/:id/value "JSONWire sendkeys doc"
